@@ -1,0 +1,365 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#080b10">
+<title>CourtForge</title>
+<link rel="manifest" href="manifest.json">
+<style>
+:root{
+  --bg:#080b10;--panel:#121821;--panel2:#19212d;--text:#f6f8fb;--muted:#96a2b3;
+  --blue:#1e8bff;--blue2:#59b0ff;--green:#38e27d;--red:#ff4d5e;--amber:#ffbd45;
+  --border:#273241;--radius:20px;--shadow:0 16px 40px rgba(0,0,0,.28)
+}
+*{box-sizing:border-box} html,body{margin:0;background:var(--bg);color:var(--text);font-family:Inter,ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif}
+body{min-height:100vh}.app{max-width:780px;margin:auto;min-height:100vh;padding-bottom:94px}
+header{position:sticky;top:0;z-index:10;padding:14px 18px;background:linear-gradient(180deg,rgba(8,11,16,.98),rgba(8,11,16,.86));backdrop-filter:blur(18px);border-bottom:1px solid rgba(255,255,255,.05)}
+.brand{display:flex;align-items:center;gap:11px}.logo{width:42px;height:42px;border-radius:13px;background:linear-gradient(135deg,var(--blue),#1359ff);display:grid;place-items:center;box-shadow:0 0 26px rgba(30,139,255,.32)}
+.logo svg{width:28px;height:28px}.brand h1{font-size:18px;margin:0;letter-spacing:.7px}.brand small{color:var(--muted)}
+main{padding:18px}.screen{display:none}.screen.active{display:block;animation:fade .2s ease}@keyframes fade{from{opacity:.25;transform:translateY(5px)}}
+.hero{background:radial-gradient(circle at 90% 0,#173765 0,transparent 42%),linear-gradient(145deg,#151d29,#0f141d);padding:22px;border:1px solid var(--border);border-radius:26px;box-shadow:var(--shadow)}
+.eyebrow{font-size:11px;color:var(--blue2);font-weight:800;letter-spacing:1.4px;text-transform:uppercase}.hero h2{font-size:30px;line-height:1.02;margin:8px 0}.hero p{color:var(--muted);margin:0}
+.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-top:14px}.card{background:var(--panel);border:1px solid var(--border);border-radius:var(--radius);padding:16px;box-shadow:0 8px 25px rgba(0,0,0,.14)}
+.card h3{margin:0 0 10px;font-size:16px}.metric{font-size:25px;font-weight:900}.sub{color:var(--muted);font-size:12px}.wide{grid-column:1/-1}
+.progress{height:9px;border-radius:99px;background:#252f3d;overflow:hidden;margin-top:10px}.progress span{display:block;height:100%;background:linear-gradient(90deg,var(--blue),var(--green));border-radius:inherit;transition:.25s}
+.ring{width:92px;height:92px;border-radius:50%;display:grid;place-items:center;background:conic-gradient(var(--blue) 72%,#26303d 0);position:relative}.ring:after{content:"";width:70px;height:70px;border-radius:50%;background:var(--panel);position:absolute}.ring strong{z-index:1;font-size:20px}
+.row{display:flex;gap:12px;align-items:center}.between{justify-content:space-between}.muted{color:var(--muted)}.small{font-size:12px}
+.btn{border:0;border-radius:14px;padding:13px 16px;font-weight:850;color:white;background:var(--blue);cursor:pointer}.btn.secondary{background:var(--panel2);border:1px solid var(--border)}.btn.danger{background:#391a22;color:#ff9ca5}.btn.block{width:100%}.btn:active{transform:scale(.985)}
+.section-title{display:flex;justify-content:space-between;align-items:center;margin:23px 2px 11px}.section-title h2{font-size:20px;margin:0}
+.checklist{display:grid;gap:8px}.check{display:flex;align-items:center;gap:11px;background:var(--panel);border:1px solid var(--border);padding:13px;border-radius:15px}.check input{width:20px;height:20px;accent-color:var(--green)}
+.nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:min(780px,100%);display:grid;grid-template-columns:repeat(5,1fr);padding:9px 8px calc(9px + env(safe-area-inset-bottom));background:rgba(12,16,23,.96);backdrop-filter:blur(20px);border-top:1px solid var(--border);z-index:20}
+.nav button{background:none;border:0;color:#7f8a99;font-size:10px;font-weight:750;padding:5px}.nav button.active{color:var(--blue2)}.nav .ico{display:block;font-size:20px;margin-bottom:3px}
+.tabs{display:flex;gap:8px;overflow:auto;padding-bottom:5px}.pill{white-space:nowrap;background:var(--panel);border:1px solid var(--border);color:var(--muted);border-radius:999px;padding:10px 14px;font-weight:800}.pill.active{background:var(--blue);color:white;border-color:var(--blue)}
+.workout-card{margin-bottom:12px}.exercise{padding:14px 0;border-top:1px solid var(--border)}.exercise:first-of-type{border-top:0}.exercise summary{cursor:pointer;list-style:none}.exercise summary::-webkit-details-marker{display:none}.tag{font-size:10px;padding:5px 8px;border-radius:999px;background:#202d3e;color:#a9d5ff;font-weight:800}.warning{background:#32191f;border:1px solid #68303b;color:#ff9da7;padding:12px;border-radius:14px}.success{background:#153324;border:1px solid #245a3d;color:#8ff4b6;padding:12px;border-radius:14px}
+input,select,textarea{width:100%;background:#0c1118;color:white;border:1px solid var(--border);border-radius:13px;padding:12px;font:inherit}label{font-size:12px;color:var(--muted);display:block;margin-bottom:6px}.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:11px}.field.full{grid-column:1/-1}
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.72);display:none;align-items:flex-end;z-index:40}.modal.open{display:flex}.sheet{width:min(780px,100%);margin:auto;background:#101720;border-radius:28px 28px 0 0;padding:22px;max-height:92vh;overflow:auto;border:1px solid var(--border)}
+.onboard{position:fixed;inset:0;background:var(--bg);z-index:100;overflow:auto;padding:22px}.onboard.hidden{display:none}.step{display:none;max-width:650px;margin:auto}.step.active{display:block}.step h1{font-size:34px}.choice-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px}.choice{padding:12px;background:var(--panel);border:1px solid var(--border);border-radius:14px;color:white;text-align:left}.choice.selected{border-color:var(--blue);background:#132840}
+.bar{height:7px;background:#1e2733;border-radius:99px;max-width:650px;margin:0 auto 25px}.bar span{height:100%;display:block;background:var(--blue);border-radius:99px}
+.knee-scale{display:grid;grid-template-columns:repeat(6,1fr);gap:6px}.knee-scale button{padding:12px 0;border-radius:12px;border:1px solid var(--border);background:var(--panel);color:white}.knee-scale button.selected{background:var(--blue)}
+.food-item,.log-item{display:flex;justify-content:space-between;gap:10px;padding:12px 0;border-top:1px solid var(--border)}.food-item:first-child,.log-item:first-child{border-top:0}
+.chart{height:150px;display:flex;align-items:end;gap:8px;padding-top:12px}.chart .col{flex:1;background:linear-gradient(var(--blue2),var(--blue));border-radius:7px 7px 3px 3px;min-height:4px;position:relative}.chart .col span{position:absolute;bottom:-20px;left:50%;transform:translateX(-50%);font-size:9px;color:var(--muted)}
+.badges{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.badge{text-align:center;padding:14px 7px;background:var(--panel);border:1px solid var(--border);border-radius:16px;opacity:.45}.badge.earned{opacity:1;border-color:#315f42}.badge .bicon{font-size:27px}
+.toast{position:fixed;top:76px;left:50%;transform:translateX(-50%);background:#eef6ff;color:#0c2440;padding:12px 16px;border-radius:14px;font-weight:800;z-index:120;display:none;box-shadow:var(--shadow)}
+@media(max-width:430px){.hero h2{font-size:27px}.form-grid{grid-template-columns:1fr}.field.full{grid-column:auto}.grid{gap:9px}.card{padding:14px}.choice-grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="toast" id="toast"></div>
+
+<div class="onboard" id="onboard">
+  <div class="bar"><span id="onboardBar" style="width:25%"></span></div>
+  <section class="step active" data-step="1">
+    <div class="logo" style="width:64px;height:64px"><svg viewBox="0 0 64 64"><path d="M11 38c8-18 21-27 42-29-8 7-12 15-13 24 5 1 9 4 13 9-16-4-29 0-38 12 1-6-1-11-4-16Z" fill="white"/><path d="M21 37c8-8 17-12 28-13" stroke="#08101a" stroke-width="5" stroke-linecap="round"/></svg></div>
+    <div class="eyebrow" style="margin-top:24px">Build the athlete</div>
+    <h1>Welcome to CourtForge.</h1>
+    <p class="muted">Train with discipline. Fuel performance. Protect your knees.</p>
+    <div class="warning" style="margin:22px 0">For minors: involve a parent or guardian, and consult a qualified doctor, coach, or physical therapist before major training or nutrition changes.</div>
+    <button class="btn block" onclick="nextStep()">Start setup</button>
+  </section>
+  <section class="step" data-step="2">
+    <div class="eyebrow">Athlete profile</div><h1>Tell us about you.</h1>
+    <div class="form-grid">
+      <div class="field"><label>Name</label><input id="obName" value="Matt"></div>
+      <div class="field"><label>Age</label><input id="obAge" type="number" value="15"></div>
+      <div class="field"><label>Height</label><input id="obHeight" value="6 ft 0 in"></div>
+      <div class="field"><label>Weight (lb)</label><input id="obWeight" type="number" value="145"></div>
+      <div class="field"><label>Estimated body fat %</label><input id="obBodyfat" type="number" value="23"></div>
+      <div class="field"><label>Basketball position</label><select id="obPosition"><option>Guard</option><option>Wing</option><option selected>Forward</option><option>Center</option></select></div>
+      <div class="field full"><label>Main goal</label><select id="obGoal"><option>Build muscle</option><option>Become more defined</option><option>Improve basketball performance</option><option>Lose body fat gradually</option><option>Increase strength</option><option>Improve conditioning</option><option>Protect knees</option><option selected>Combination goal</option></select></div>
+    </div>
+    <div class="row" style="margin-top:18px"><button class="btn secondary" onclick="prevStep()">Back</button><button class="btn" style="flex:1" onclick="nextStep()">Continue</button></div>
+  </section>
+  <section class="step" data-step="3">
+    <div class="eyebrow">Training & safety</div><h1>Build the right plan.</h1>
+    <div class="form-grid">
+      <div class="field"><label>Experience</label><select id="obExperience"><option>Beginner</option><option selected>Intermediate</option><option>Advanced</option></select></div>
+      <div class="field"><label>Training days available</label><select id="obDays"><option>3</option><option>4</option><option>5</option><option selected>6</option></select></div>
+      <div class="field"><label>Dumbbells available</label><input id="obEquipment" value="10, 15, 20 lb"></div>
+      <div class="field"><label>Gym access</label><select id="obGym"><option selected>Yes</option><option>No</option><option>Sometimes</option></select></div>
+      <div class="field full"><label>Practice days</label><input id="obPractice" value="Tuesday, Thursday, Saturday"></div>
+      <div class="field full"><label>Injury history</label><select id="obInjury"><option>None</option><option>Osgood-Schlatter</option><option>Jumper's knee</option><option selected>Osgood-Schlatter and jumper's knee</option></select></div>
+      <div class="field full"><label>Current knee pain (0–10)</label><div class="knee-scale" id="obPain"></div></div>
+    </div>
+    <div class="row" style="margin-top:18px"><button class="btn secondary" onclick="prevStep()">Back</button><button class="btn" style="flex:1" onclick="nextStep()">Continue</button></div>
+  </section>
+  <section class="step" data-step="4">
+    <div class="eyebrow">Recovery & nutrition</div><h1>Set your baseline.</h1>
+    <div class="form-grid">
+      <div class="field"><label>Average sleep</label><select id="obSleep"><option>Under 6 hours</option><option>6–7 hours</option><option selected>7–8 hours</option><option>8–10 hours</option></select></div>
+      <div class="field"><label>Daily water</label><select id="obWater"><option>Under 4 cups</option><option>4–6 cups</option><option selected>6–8 cups</option><option>8+ cups</option></select></div>
+      <div class="field full"><label>Food allergies</label><input id="obAllergies" value="Nuts"></div>
+      <div class="field full"><label>Food dislikes</label><input id="obDislikes" value="Yogurt"></div>
+      <div class="field full"><label>Typical restaurants</label><input id="obRestaurants" value="Chick-fil-A, Chipotle, McDonald's, Jersey Mike's"></div>
+    </div>
+    <div class="success" style="margin:18px 0">Starting estimates: 2,450 calories, 120 g protein, 8–10 hours sleep. These are not medical prescriptions and will adjust with your logs.</div>
+    <div class="row"><button class="btn secondary" onclick="prevStep()">Back</button><button class="btn" style="flex:1" onclick="finishOnboarding()">Enter CourtForge</button></div>
+  </section>
+</div>
+
+<div class="app">
+<header>
+  <div class="brand">
+    <div class="logo"><svg viewBox="0 0 64 64"><path d="M11 38c8-18 21-27 42-29-8 7-12 15-13 24 5 1 9 4 13 9-16-4-29 0-38 12 1-6-1-11-4-16Z" fill="white"/><path d="M21 37c8-8 17-12 28-13" stroke="#08101a" stroke-width="5" stroke-linecap="round"/></svg></div>
+    <div><h1>COURTFORGE</h1><small id="headerSub">Build the athlete.</small></div>
+  </div>
+</header>
+<main>
+<section class="screen active" id="today">
+  <div class="hero">
+    <div class="eyebrow" id="greetingLabel">Thursday • Day 1</div>
+    <h2 id="greeting">Good afternoon, Athlete.</h2>
+    <p>Train hard enough to improve, smart enough to stay healthy.</p>
+    <div class="row between" style="margin-top:20px">
+      <div><span class="sub">DAILY COMPLETION</span><div class="metric" id="dailyPct">0%</div></div>
+      <div class="ring" id="dailyRing"><strong id="ringPct">0%</strong></div>
+    </div>
+  </div>
+  <div class="grid">
+    <div class="card"><span class="sub">🔥 STREAK</span><div class="metric"><span id="streak">1</span> day</div><div class="sub">Keep the chain alive</div></div>
+    <div class="card"><span class="sub">⚡ READINESS</span><div class="metric" id="readiness">82</div><div class="sub" id="readinessLabel">Ready to train</div></div>
+    <div class="card wide">
+      <div class="row between"><div><span class="eyebrow">TODAY'S WORKOUT</span><h3 style="font-size:22px;margin:6px 0" id="todayWorkoutName">Chest, Shoulders & Triceps</h3><span class="muted">45–60 min • Home or gym</span></div><button class="btn" onclick="go('workouts')">Start</button></div>
+    </div>
+    <div class="card"><span class="sub">CALORIES</span><div class="metric"><span id="calNow">0</span><small>/2450</small></div><div class="progress"><span id="calBar" style="width:0%"></span></div></div>
+    <div class="card"><span class="sub">PROTEIN</span><div class="metric"><span id="proteinNow">0</span><small>/120g</small></div><div class="progress"><span id="proteinBar" style="width:0%"></span></div></div>
+    <div class="card"><span class="sub">WATER</span><div class="metric"><span id="waterNow">0</span><small>/10 cups</small></div><button class="btn secondary" style="margin-top:9px" onclick="addWater()">+ 1 cup</button></div>
+    <div class="card"><span class="sub">SLEEP</span><div class="metric"><span id="sleepNow">8</span><small> hrs</small></div><button class="btn secondary" style="margin-top:9px" onclick="openCheckin()">Update</button></div>
+  </div>
+
+  <div class="section-title"><h2>Knee check</h2><button class="btn secondary" onclick="openCheckin()">Check in</button></div>
+  <div class="card">
+    <div class="row between"><div><span class="sub">CURRENT PAIN</span><div class="metric"><span id="kneeNow">2</span>/10</div></div><div id="kneeAdvice" class="success">Continue carefully</div></div>
+    <p class="muted small">Sharp pain, limping, swelling, locking, or buckling means stop and seek qualified medical guidance.</p>
+  </div>
+
+  <div class="section-title"><h2>Daily checklist</h2><span class="muted small" id="checkCount">0/10</span></div>
+  <div class="checklist" id="dailyChecklist"></div>
+  <div class="section-title"><h2>Weekly mission</h2><span class="tag">+300 XP</span></div>
+  <div class="card"><h3>Five disciplined training days</h3><p class="muted">Complete 5 workouts, hit protein 5 times, and take 1 full recovery day.</p><div class="progress"><span id="missionBar" style="width:20%"></span></div><p class="small muted"><span id="missionText">1</span> of 5 workouts</p></div>
+</section>
+
+<section class="screen" id="workouts">
+  <div class="hero"><div class="eyebrow">TRAINING PLAN</div><h2>Six days. Smart intensity.</h2><p>Perfect form before heavier weight. Most sets should finish with 1–3 clean reps remaining.</p></div>
+  <div class="section-title"><h2>Training mode</h2></div>
+  <div class="tabs"><button class="pill active" id="homeMode" onclick="setMode('home')">🏠 Home</button><button class="pill" id="gymMode" onclick="setMode('gym')">🏋️ Gym</button><button class="pill" onclick="showConditioning()">🏃 Conditioning</button></div>
+  <div id="workoutList" style="margin-top:14px"></div>
+</section>
+
+<section class="screen" id="nutrition">
+  <div class="hero"><div class="eyebrow">FUEL PERFORMANCE</div><h2>Eat to recover.</h2><p>Awareness over restriction. No aggressive calorie cuts for growing athletes.</p></div>
+  <div class="grid">
+    <div class="card"><span class="sub">CALORIES</span><div class="metric"><span id="nCal">0</span>/2450</div><div class="progress"><span id="nCalBar"></span></div></div>
+    <div class="card"><span class="sub">PROTEIN</span><div class="metric"><span id="nProtein">0</span>/120g</div><div class="progress"><span id="nProteinBar"></span></div></div>
+    <div class="card wide"><div class="row between"><div><span class="sub">NUTRITION SCORE</span><div class="metric" id="nutritionScore">64/100</div></div><button class="btn" onclick="openFood()">+ Log food</button></div><p class="muted small" id="nutritionFeedback">Log meals to receive useful feedback.</p></div>
+  </div>
+  <div class="section-title"><h2>Today's food</h2><button class="btn secondary" onclick="openFood()">Add meal</button></div>
+  <div class="card" id="foodLog"></div>
+  <div class="section-title"><h2>Fast-food guide</h2><span class="muted small">Verify allergens</span></div>
+  <div id="fastFoodList"></div>
+</section>
+
+<section class="screen" id="progress">
+  <div class="hero"><div class="eyebrow">LONG-TERM PROGRESS</div><h2>Measure the trend.</h2><p>Weekly averages matter more than daily scale changes.</p></div>
+  <div class="grid">
+    <div class="card"><span class="sub">LEVEL</span><div class="metric">4</div><div class="sub"><span id="xp">680</span> XP</div></div>
+    <div class="card"><span class="sub">WORKOUTS</span><div class="metric" id="workoutTotal">1</div><div class="sub">Completed</div></div>
+    <div class="card wide"><div class="row between"><h3>Weight trend</h3><button class="btn secondary" onclick="openProgress()">+ Log</button></div><div class="chart" id="weightChart"></div></div>
+    <div class="card wide"><h3>Knee pain trend</h3><div class="chart" id="painChart"></div></div>
+  </div>
+  <div class="section-title"><h2>Achievements</h2></div>
+  <div class="badges" id="badges"></div>
+  <div class="section-title"><h2>Next checkpoint</h2></div>
+  <div class="card"><div class="row between"><div><span class="eyebrow">WEEK 1</span><h3 style="margin-top:6px">Consistency review</h3></div><div class="metric">6d</div></div><p class="muted">Review strength, energy, knee response, protein, sleep, and the biggest obstacle.</p></div>
+</section>
+
+<section class="screen" id="profile">
+  <div class="hero"><div class="eyebrow">ATHLETE PROFILE</div><h2 id="profileName">Matt</h2><p id="profileSummary">15 • Forward • Combination goal</p></div>
+  <div class="section-title"><h2>Preferences</h2></div>
+  <div class="card">
+    <div class="form-grid">
+      <div class="field"><label>Calorie target</label><input id="pCalories" type="number" value="2450"></div>
+      <div class="field"><label>Protein target (g)</label><input id="pProtein" type="number" value="120"></div>
+      <div class="field"><label>Water target (cups)</label><input id="pWater" type="number" value="10"></div>
+      <div class="field"><label>Sleep target (hours)</label><input id="pSleep" type="number" value="9"></div>
+      <div class="field full"><label>Allergies</label><input id="pAllergies" value="Nuts"></div>
+      <div class="field full"><label>Equipment</label><input id="pEquipment" value="10, 15, 20 lb dumbbells"></div>
+    </div>
+    <button class="btn block" style="margin-top:14px" onclick="saveProfile()">Save profile</button>
+  </div>
+  <div class="section-title"><h2>AI Coach</h2></div>
+  <div class="card"><p class="muted">Ask about form, alternatives, weight selection, knee-friendly substitutions, scheduling, or meals.</p><textarea id="coachQ" rows="3" placeholder="Example: My knee hurts during split squats. What should I do?"></textarea><button class="btn block" style="margin-top:10px" onclick="askCoach()">Ask coach</button><div id="coachAnswer" style="margin-top:12px"></div></div>
+  <div class="section-title"><h2>Supplement education</h2></div>
+  <div class="card"><h3>Creatine monohydrate</h3><p class="muted small">May support strength and repeated-sprint performance. It does not directly burn fat and can increase water weight. Minors should involve a parent or guardian and a qualified medical professional. Avoid stimulant blends.</p></div>
+  <div class="warning" style="margin-top:16px"><strong>Medical disclaimer:</strong> CourtForge does not diagnose injuries or replace individualized medical care. Stop sharp pain and seek qualified help for swelling, locking, buckling, limping, or worsening symptoms.</div>
+  <button class="btn danger block" style="margin-top:18px" onclick="resetApp()">Reset demo data</button>
+</section>
+</main>
+
+<nav class="nav">
+<button class="active" data-screen="today" onclick="go('today')"><span class="ico">◉</span>Today</button>
+<button data-screen="workouts" onclick="go('workouts')"><span class="ico">▦</span>Workouts</button>
+<button data-screen="nutrition" onclick="go('nutrition')"><span class="ico">◒</span>Nutrition</button>
+<button data-screen="progress" onclick="go('progress')"><span class="ico">↗</span>Progress</button>
+<button data-screen="profile" onclick="go('profile')"><span class="ico">●</span>Profile</button>
+</nav>
+</div>
+
+<div class="modal" id="checkinModal"><div class="sheet">
+  <div class="row between"><h2>Daily readiness check</h2><button class="btn secondary" onclick="closeModal('checkinModal')">Close</button></div>
+  <label>Sleep last night (hours)</label><input type="number" id="checkSleep" value="8" min="0" max="12" step=".5">
+  <label style="margin-top:14px">Knee pain now (0–10)</label><input type="range" id="checkPain" min="0" max="10" value="2" oninput="painOut.textContent=this.value"><div class="metric"><span id="painOut">2</span>/10</div>
+  <label>Energy (1–10)</label><input type="range" id="checkEnergy" min="1" max="10" value="8">
+  <button class="btn block" style="margin-top:18px" onclick="saveCheckin()">Save check-in</button>
+</div></div>
+
+<div class="modal" id="foodModal"><div class="sheet">
+  <div class="row between"><h2>Log food</h2><button class="btn secondary" onclick="closeModal('foodModal')">Close</button></div>
+  <div class="form-grid">
+    <div class="field"><label>Meal</label><select id="foodMeal"><option>Breakfast</option><option>Morning snack</option><option>Lunch</option><option>Pre-workout</option><option>Post-workout</option><option>Dinner</option><option>Evening snack</option><option>Drink</option></select></div>
+    <div class="field"><label>Food name</label><input id="foodName" value="Chicken bowl"></div>
+    <div class="field"><label>Restaurant/brand</label><input id="foodBrand" value="Chipotle"></div>
+    <div class="field"><label>Serving</label><input id="foodServing" value="1 bowl"></div>
+    <div class="field"><label>Calories</label><input id="foodCalories" type="number" value="650"></div>
+    <div class="field"><label>Protein (g)</label><input id="foodProtein" type="number" value="42"></div>
+    <div class="field"><label>Carbs (g)</label><input id="foodCarbs" type="number" value="76"></div>
+    <div class="field"><label>Fat (g)</label><input id="foodFat" type="number" value="18"></div>
+  </div>
+  <div class="warning" style="margin-top:14px">Allergy reminder: restaurant cross-contact is possible. Verify current ingredients directly with the restaurant.</div>
+  <button class="btn block" style="margin-top:14px" onclick="saveFood()">Add to log</button>
+</div></div>
+
+<div class="modal" id="progressModal"><div class="sheet">
+  <div class="row between"><h2>Log progress</h2><button class="btn secondary" onclick="closeModal('progressModal')">Close</button></div>
+  <div class="form-grid">
+    <div class="field"><label>Weight (lb)</label><input id="progWeight" type="number" value="145" step=".1"></div>
+    <div class="field"><label>Waist (in)</label><input id="progWaist" type="number" value="32" step=".1"></div>
+    <div class="field"><label>Knee pain</label><input id="progPain" type="number" value="2" min="0" max="10"></div>
+    <div class="field"><label>Energy</label><input id="progEnergy" type="number" value="8" min="1" max="10"></div>
+    <div class="field full"><label>Notes</label><textarea id="progNotes" placeholder="What improved? What felt difficult?"></textarea></div>
+  </div>
+  <button class="btn block" style="margin-top:14px" onclick="saveProgress()">Save progress</button>
+</div></div>
+
+<script>
+const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
+const todayKey=()=>new Date().toISOString().slice(0,10);
+const defaultState={
+ user:{name:"Matt",age:15,height:"6 ft 0 in",weight:145,position:"Forward",goal:"Combination goal",allergies:"Nuts",equipment:"10, 15, 20 lb dumbbells"},
+ targets:{calories:2450,protein:120,water:10,sleep:9},
+ today:{date:todayKey(),water:0,sleep:8,knee:2,energy:8,checklist:{},foods:[],workoutDone:false},
+ progress:[{date:"Jun 12",weight:146.2,pain:4},{date:"Jun 19",weight:145.8,pain:3},{date:"Jun 26",weight:145.3,pain:3},{date:"Jul 2",weight:145,pain:2}],
+ xp:680,streak:1,workouts:1,onboarded:false,mode:"home"
+};
+let state=JSON.parse(localStorage.getItem("courtforgeState")||"null")||structuredClone(defaultState);
+if(state.today.date!==todayKey()) state.today={date:todayKey(),water:0,sleep:8,knee:2,energy:8,checklist:{},foods:[],workoutDone:false};
+const checklist=["Complete workout","Warm up","Log breakfast","Log lunch","Log dinner","Hit protein goal","Drink enough water","Complete knee-recovery work","Stretch after training","Sleep 8–10 hours"];
+
+const workouts=[
+{name:"Chest, Shoulders & Triceps",home:["Dumbbell floor press","Dumbbell squeeze press","Seated dumbbell shoulder press","Dumbbell lateral raise","Push-ups","Overhead dumbbell triceps extension","Dead bug"],gym:["Chest press machine","Incline dumbbell press","Shoulder press machine","Cable lateral raise","Assisted dip machine","Cable triceps pushdown","Cable crunch"]},
+{name:"Knee-Friendly Legs",home:["Dumbbell Romanian deadlift","Weighted glute bridge","Supported split-squat hold","Low step-up","Single-leg Romanian deadlift","Calf raise","Tibialis raise"],gym:["Seated hamstring curl","Hip thrust machine","Cable pull-through","Leg press — pain-free depth","Calf raise machine","Back extension","Supported sled drag"]},
+{name:"Back, Biceps & Posture",home:["One-arm dumbbell row","Dumbbell pullover","Reverse fly","Dumbbell shrug","Dumbbell curl","Hammer curl","Suitcase carry"],gym:["Lat pulldown","Seated cable row","Reverse pec deck","Machine shrug","Cable curl","Preacher curl machine","Farmer carry"]},
+{name:"Upper-Body Definition",home:["Dumbbell floor press","One-arm row","Seated shoulder press","Reverse fly","Hammer curl","Triceps extension","Plank"],gym:["Chest press machine","Cable row","Shoulder press machine","Reverse pec deck","Cable curl","Rope pushdown","Cable crunch"]},
+{name:"Basketball Legs & Knee Capacity",home:["Spanish squat isometric","Dumbbell box squat to high chair","Romanian deadlift","Glute bridge","Supported lateral lunge","Single-leg calf raise","Side plank"],gym:["Leg press — pain-free depth","Seated hamstring curl","Hip thrust machine","Cable lateral walk","Calf raise machine","Reverse sled drag","Pallof press"]},
+{name:"Full-Body Strength",home:["Romanian deadlift","Floor press","One-arm row","Glute bridge","Shoulder press","Reverse fly","Hammer curl","Triceps extension","Farmer carry","Dead bug"],gym:["Chest press","Seated row","Hamstring curl","Hip thrust","Shoulder press machine","Reverse pec deck","Cable curl","Rope pushdown","Farmer carry","Cable core movement"]},
+{name:"Recovery",home:["Easy walking","Light shooting","Gentle ball handling","Mobility","Stretching","Knee isometrics","Hydration and sleep focus"],gym:["Easy walking","Light shooting","Gentle ball handling","Mobility","Stretching","Knee isometrics","Hydration and sleep focus"]}
+];
+const exerciseInfo={
+ "Dumbbell Romanian deadlift":{muscle:"Hamstrings • Glutes",sets:"3 × 8–12",rest:"90 sec",tip:"Push hips backward instead of squatting down. Keep dumbbells close to your legs. Feel hamstrings and glutes, not sharp pressure in the lower back or knees.",mistake:"Bending the knees too much or rounding the back."},
+ "Romanian deadlift":{muscle:"Hamstrings • Glutes",sets:"3 × 8–12",rest:"90 sec",tip:"Brace, soften the knees, send hips back, and keep the load close.",mistake:"Turning it into a squat."},
+ "Spanish squat isometric":{muscle:"Quadriceps • Tendon capacity",sets:"4 × 30–45 sec",rest:"60 sec",tip:"Sit back against the strap with an upright torso. Use only a tolerable range.",mistake:"Forcing through sharp pain."},
+ "Dumbbell floor press":{muscle:"Chest • Triceps",sets:"3 × 8–12",rest:"75 sec",tip:"Keep shoulder blades gently pulled back. Lower until upper arms touch the floor, then press smoothly.",mistake:"Flaring elbows straight out."},
+ "One-arm dumbbell row":{muscle:"Lats • Upper back",sets:"3 × 10–12",rest:"60 sec",tip:"Keep hips square and pull the elbow toward your back pocket.",mistake:"Twisting the torso to lift more weight."}
+};
+const ff=[
+{name:"Chick-fil-A",best:"Grilled nuggets + fruit cup",protein:"~25–40 g protein",pre:"Grilled sandwich + fruit",post:"Grilled nuggets + fries + milk",limit:"Large fries, sugary drink, dessert, multiple sauces"},
+{name:"Chipotle",best:"Chicken bowl with rice, beans, fajita vegetables",protein:"~40–50 g protein",pre:"Half-size rice bowl, moderate fat",post:"Full chicken bowl",limit:"Double cheese, queso, sour cream and chips together"},
+{name:"McDonald's",best:"Egg McMuffin or two hamburgers",protein:"~17–30 g protein",pre:"Hamburger + apple slices",post:"Chicken sandwich + small fries + milk",limit:"Large combo, sugary drink, dessert and sauces together"},
+{name:"Jersey Mike's",best:"Regular turkey or chicken sub, light mayo",protein:"~30–45 g protein",pre:"Mini turkey sub",post:"Regular chicken or turkey sub",limit:"Giant size, heavy mayo, chips and sugary drink"},
+{name:"Taco Bell",best:"Chicken power bowl or bean burrito + chicken",protein:"~20–35 g protein",pre:"Soft tacos, easy sauce",post:"Power bowl + extra chicken",limit:"Large nachos, freezes and multiple creamy sauces"}
+];
+function save(){localStorage.setItem("courtforgeState",JSON.stringify(state));render()}
+function toast(t){$("#toast").textContent=t;$("#toast").style.display="block";setTimeout(()=>$("#toast").style.display="none",2200)}
+let obStep=1, selectedPain=2;
+function renderPainButtons(){
+ $("#obPain").innerHTML=[0,1,2,3,4,5,6,7,8,9,10].map(n=>`<button class="${n===selectedPain?'selected':''}" onclick="selectedPain=${n};renderPainButtons()">${n}</button>`).join("")
+}
+function nextStep(){obStep=Math.min(4,obStep+1);renderStep()} function prevStep(){obStep=Math.max(1,obStep-1);renderStep()}
+function renderStep(){$$(".step").forEach(x=>x.classList.toggle("active",+x.dataset.step===obStep));$("#onboardBar").style.width=(obStep*25)+"%"}
+function finishOnboarding(){
+ state.user={name:$("#obName").value||"Athlete",age:+$("#obAge").value||15,height:$("#obHeight").value,weight:+$("#obWeight").value||145,position:$("#obPosition").value,goal:$("#obGoal").value,allergies:$("#obAllergies").value,equipment:$("#obEquipment").value+" dumbbells",injury:$("#obInjury").value};
+ state.today.knee=selectedPain;state.onboarded=true;save();$("#onboard").classList.add("hidden");toast("Welcome to CourtForge")
+}
+function go(id){$$(".screen").forEach(x=>x.classList.toggle("active",x.id===id));$$(".nav button").forEach(x=>x.classList.toggle("active",x.dataset.screen===id));window.scrollTo({top:0,behavior:"smooth"})}
+function totals(){return state.today.foods.reduce((a,f)=>({cal:a.cal+f.calories,protein:a.protein+f.protein}),{cal:0,protein:0})}
+function completion(){
+ let c=Object.values(state.today.checklist).filter(Boolean).length;
+ return Math.round(c/checklist.length*100)
+}
+function renderChecklist(){
+ $("#dailyChecklist").innerHTML=checklist.map((x,i)=>`<label class="check"><input type="checkbox" ${state.today.checklist[i]?"checked":""} onchange="state.today.checklist[${i}]=this.checked;save()"><span>${x}</span></label>`).join("")
+}
+function renderWorkouts(){
+ $("#workoutList").innerHTML=workouts.map((w,di)=>`<div class="card workout-card"><div class="row between"><div><span class="eyebrow">DAY ${di+1}</span><h3 style="font-size:20px;margin:5px 0">${w.name}</h3></div>${di===0?'<span class="tag">TODAY</span>':''}</div>
+ ${(w[state.mode]||w.home).map((e,ei)=>{let info=exerciseInfo[e]||{muscle:"Primary target muscles",sets:di===6?"15–30 min":"3 × 8–12",rest:"60–90 sec",tip:"Use controlled form and a pain-free range. Stop before technique breaks down.",mistake:"Using momentum or forcing painful range."};return `<details class="exercise"><summary><div class="row between"><div><strong>${e}</strong><div class="small muted">${info.sets} • ${info.muscle}</div></div><span class="tag">DETAILS</span></div></summary>
+ <p class="small"><strong>Technique:</strong> ${info.tip}</p><p class="small muted"><strong>Common mistake:</strong> ${info.mistake}</p><p class="small muted"><strong>Rest:</strong> ${info.rest}. Choose a weight that leaves 1–3 clean reps in reserve.</p>
+ <div class="warning small">Stop immediately for sharp pain. At pain 3/10, reduce range, load, or volume. At 4+/10, stop the painful exercise.</div>
+ <div class="form-grid" style="margin-top:10px"><input type="number" placeholder="Weight used"><input type="number" placeholder="Reps completed"><select><option>Correct difficulty</option><option>Too easy</option><option>Too hard</option><option>Form broke down</option><option>Painful</option></select><input type="number" min="0" max="10" placeholder="Pain 0–10"></div></details>`}).join("")}
+ ${di===0?`<button class="btn block" onclick="completeWorkout()">Complete workout</button>`:""}</div>`).join("")
+}
+function setMode(m){state.mode=m;save();$("#homeMode").classList.toggle("active",m==="home");$("#gymMode").classList.toggle("active",m==="gym");renderWorkouts()}
+function completeWorkout(){if(!state.today.workoutDone){state.today.workoutDone=true;state.today.checklist[0]=true;state.workouts++;state.xp+=100;toast("Workout complete • +100 XP")}save()}
+function renderFood(){
+ let foods=state.today.foods;
+ $("#foodLog").innerHTML=foods.length?foods.map((f,i)=>`<div class="food-item"><div><strong>${f.name}</strong><div class="small muted">${f.meal} • ${f.brand||"Custom"} • ${f.serving}</div></div><div style="text-align:right"><strong>${f.calories} cal</strong><div class="small muted">${f.protein}g protein</div></div></div>`).join(""):`<p class="muted">No meals logged yet.</p>`;
+ $("#fastFoodList").innerHTML=ff.map(x=>`<details class="card" style="margin-bottom:10px"><summary class="row between"><strong>${x.name}</strong><span class="tag">OPEN</span></summary><p><strong>Best high-protein:</strong> ${x.best}</p><p class="small muted">${x.protein}</p><p class="small"><strong>Pre-practice:</strong> ${x.pre}<br><strong>Post-practice:</strong> ${x.post}</p><p class="small muted"><strong>Limit:</strong> ${x.limit}</p><div class="warning small">Allergy and cross-contact warning: verify current ingredients with the restaurant.</div></details>`).join("")
+}
+function openFood(){$("#foodModal").classList.add("open")} function openCheckin(){$("#checkinModal").classList.add("open")} function openProgress(){$("#progressModal").classList.add("open")}
+function closeModal(id){$("#"+id).classList.remove("open")}
+function saveFood(){
+ state.today.foods.push({meal:$("#foodMeal").value,name:$("#foodName").value,brand:$("#foodBrand").value,serving:$("#foodServing").value,calories:+$("#foodCalories").value||0,protein:+$("#foodProtein").value||0,carbs:+$("#foodCarbs").value||0,fat:+$("#foodFat").value||0});
+ let m=$("#foodMeal").value.toLowerCase(); if(m.includes("breakfast"))state.today.checklist[2]=true;if(m.includes("lunch"))state.today.checklist[3]=true;if(m.includes("dinner"))state.today.checklist[4]=true;
+ closeModal("foodModal");toast("Meal logged");save()
+}
+function saveCheckin(){state.today.sleep=+$("#checkSleep").value;state.today.knee=+$("#checkPain").value;state.today.energy=+$("#checkEnergy").value;if(state.today.sleep>=8)state.today.checklist[9]=true;closeModal("checkinModal");save()}
+function addWater(){state.today.water++;if(state.today.water>=state.targets.water)state.today.checklist[6]=true;toast("+1 cup water");save()}
+function saveProgress(){state.progress.push({date:new Date().toLocaleDateString("en-US",{month:"short",day:"numeric"}),weight:+$("#progWeight").value,pain:+$("#progPain").value,waist:+$("#progWaist").value,energy:+$("#progEnergy").value,notes:$("#progNotes").value});state.progress=state.progress.slice(-8);state.xp+=30;closeModal("progressModal");toast("Progress logged • +30 XP");save()}
+function chart(el,key,max){
+ let data=state.progress.slice(-7);$(el).innerHTML=data.map(d=>`<div class="col" style="height:${Math.max(5,(d[key]/max)*100)}%"><span>${d.date}</span></div>`).join("")
+}
+function saveProfile(){state.targets={calories:+$("#pCalories").value,protein:+$("#pProtein").value,water:+$("#pWater").value,sleep:+$("#pSleep").value};state.user.allergies=$("#pAllergies").value;state.user.equipment=$("#pEquipment").value;toast("Profile saved");save()}
+function askCoach(){
+ let q=$("#coachQ").value.toLowerCase(),a="";
+ if(/knee|pain|osgood|jumper/.test(q)) a="Stop any sharp or worsening pain. If pain is 3/10, reduce range, load, or volume. At 4+/10, stop that exercise and use a pain-free alternative such as glute bridges, Romanian deadlifts, hamstring curls, or tolerable isometrics. Swelling, locking, buckling, or limping needs qualified medical evaluation.";
+ else if(/weight|heavy|reps|rir/.test(q)) a="Choose a load that lets you finish with 1–3 clean repetitions remaining. If you exceed the top of the rep range easily, increase slightly next time. If you miss the minimum reps, lose form, or feel joint pain, reduce weight.";
+ else if(/food|meal|protein|fast/.test(q)) a=`You have about ${Math.max(0,state.targets.calories-totals().cal)} calories and ${Math.max(0,state.targets.protein-totals().protein)} g protein remaining. Build the next meal around a lean protein, carbohydrate, fruit or vegetable, and water. Do not compensate for a high-calorie meal by starving the next day.`;
+ else if(/sleep|tired|recovery/.test(q)) a="With less than 6 hours of sleep, lower workout intensity, avoid maximal efforts, and prioritize technique. Basketball practice already counts as conditioning, so remove extra intervals on hard practice days.";
+ else a="Use controlled technique, keep 1–3 reps in reserve, and choose the version that matches your equipment and pain-free range. Tell me the exact exercise, equipment, and what feels difficult for a more specific answer.";
+ $("#coachAnswer").innerHTML=`<div class="success">${a}</div>`
+}
+function showConditioning(){toast("Conditioning: 2–3 easy run/walks, 1 controlled interval day, basketball counts, and at least 1 recovery day. Stop if knee pain rises.")}
+function resetApp(){localStorage.removeItem("courtforgeState");location.reload()}
+function render(){
+ $("#onboard").classList.toggle("hidden",state.onboarded);
+ let t=totals(),pct=completion();
+ $("#greeting").textContent=`Good ${new Date().getHours()<12?"morning":new Date().getHours()<18?"afternoon":"evening"}, ${state.user.name}.`;
+ $("#profileName").textContent=state.user.name;$("#profileSummary").textContent=`${state.user.age} • ${state.user.position} • ${state.user.goal}`;
+ $("#dailyPct").textContent=pct+"%";$("#ringPct").textContent=pct+"%";$("#dailyRing").style.background=`conic-gradient(var(--blue) ${pct}%,#26303d 0)`;
+ $("#checkCount").textContent=Object.values(state.today.checklist).filter(Boolean).length+"/"+checklist.length;
+ $("#streak").textContent=state.streak;$("#xp").textContent=state.xp;$("#workoutTotal").textContent=state.workouts;
+ $("#waterNow").textContent=state.today.water;$("#sleepNow").textContent=state.today.sleep;$("#kneeNow").textContent=state.today.knee;
+ let readiness=Math.max(20,Math.round(100-(Math.max(0,8-state.today.sleep)*9)-(state.today.knee*7)-(Math.max(0,6-state.today.energy)*5)));
+ $("#readiness").textContent=readiness;$("#readinessLabel").textContent=readiness>=80?"Ready to train":readiness>=60?"Train with adjustments":"Recovery recommended";
+ $("#kneeAdvice").className=state.today.knee>=4?"warning":"success";$("#kneeAdvice").textContent=state.today.knee>=4?"Stop painful exercise":state.today.knee===3?"Reduce range/load":"Continue carefully";
+ ["calNow","nCal"].forEach(id=>$("#"+id).textContent=t.cal);["proteinNow","nProtein"].forEach(id=>$("#"+id).textContent=t.protein);
+ let cp=Math.min(100,t.cal/state.targets.calories*100),pp=Math.min(100,t.protein/state.targets.protein*100);
+ $("#calBar").style.width=$("#nCalBar").style.width=cp+"%";$("#proteinBar").style.width=$("#nProteinBar").style.width=pp+"%";
+ let score=Math.min(100,45+Math.round(pp*.35)+Math.min(20,state.today.water/state.targets.water*20));
+ $("#nutritionScore").textContent=Math.round(score)+"/100";$("#nutritionFeedback").textContent=t.protein>=state.targets.protein?"Protein was strong today.":"Add a protein-rich food at your next meal. Do not skip meals to compensate.";
+ $("#pCalories").value=state.targets.calories;$("#pProtein").value=state.targets.protein;$("#pWater").value=state.targets.water;$("#pSleep").value=state.targets.sleep;$("#pAllergies").value=state.user.allergies||"";$("#pEquipment").value=state.user.equipment||"";
+ $("#badges").innerHTML=[["🏁","First workout",state.workouts>=1],["🔥","7-day streak",state.streak>=7],["💪","10 workouts",state.workouts>=10],["🥤","Hydration win",state.today.water>=state.targets.water],["🦵","Smart knee care",state.today.knee<=2],["🏆","12-week finish",false]].map(b=>`<div class="badge ${b[2]?"earned":""}"><div class="bicon">${b[0]}</div><strong class="small">${b[1]}</strong></div>`).join("");
+ renderChecklist();renderWorkouts();renderFood();chart("#weightChart","weight",155);chart("#painChart","pain",10)
+}
+renderPainButtons();render();
+</script>
+</body></html>
